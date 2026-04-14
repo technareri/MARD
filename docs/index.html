@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARD – Figure Gallery</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   Helvetica, Arial, sans-serif;
+      background: #f5f7fa;
+      color: #24292f;
+      line-height: 1.6;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    header {
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    header h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.4rem; }
+    header p  { font-size: 0.95rem; opacity: 0.75; max-width: 680px; margin: 0 auto; }
+    header .badge {
+      display: inline-block;
+      margin-top: 0.9rem;
+      padding: 0.3rem 0.75rem;
+      background: #238636;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    header .badge:hover { background: #2ea043; }
+
+    /* ── Main container ──────────────────────────────────────── */
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* ── How-to banner ───────────────────────────────────────── */
+    .how-to {
+      background: #fff;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    .how-to strong { display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+    .how-to code {
+      background: #f0f3f6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* ── Figure grid ─────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ── Card ────────────────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+
+    /* figure preview */
+    .card .preview {
+      background: #f0f3f6;
+      border-bottom: 1px solid #d0d7de;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      overflow: hidden;
+    }
+    .card .preview img.figure-img {
+      max-width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+    }
+    /* placeholder shown when figure file is not yet present */
+    .card .preview .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: #8b949e;
+      font-size: 0.85rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .card .preview .placeholder svg { opacity: 0.4; }
+
+    /* card body */
+    .card .body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+    .card .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0969da;
+    }
+    .card h2 { font-size: 0.97rem; font-weight: 600; }
+    .card p  { font-size: 0.85rem; color: #57606a; flex: 1; }
+
+    /* QR + links row */
+    .card .foot {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 0.6rem;
+    }
+    /* qrcode.js renders a canvas inside the .qr div */
+    .card .foot .qr {
+      width: 80px; height: 80px;
+      border: 1px solid #d0d7de; border-radius: 4px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .card .foot .qr canvas,
+    .card .foot .qr img { display: block; width: 80px !important; height: 80px !important; }
+    .card .foot .links { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.82rem; }
+    .card .foot .links a {
+      color: #0969da;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .card .foot .links a:hover { text-decoration: underline; }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.8rem;
+      color: #8b949e;
+      border-top: 1px solid #d0d7de;
+      margin-top: 3rem;
+    }
+    footer a { color: #0969da; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MARD – Figure Gallery</h1>
+  <p>
+    Predictive Modeling of Antibody Thermostability: Evaluation and Ranking of
+    Machine Learning Models for Prediction Performance Based on Amino Acid Sequences
+  </p>
+  <a class="badge"
+     href="https://github.com/technareri/MARD"
+     target="_blank" rel="noopener">
+    ⭐ View on GitHub
+  </a>
+</header>
+
+<main>
+  <div class="how-to">
+    <strong>📱 Scan a QR code to access any figure directly</strong>
+    Each card below shows a QR code that links to the full-resolution figure hosted on GitHub.
+    Scan with any smartphone camera to open the figure URL without typing.
+    Raw figure URLs follow the pattern:
+    <code>https://raw.githubusercontent.com/technareri/MARD/main/figures/&lt;filename&gt;</code>
+  </div>
+
+  <div class="grid" id="gallery">
+    <!-- Cards are injected by the script below -->
+  </div>
+</main>
+
+<footer>
+  Figures hosted on
+  <a href="https://github.com/technareri/MARD" target="_blank" rel="noopener">
+    github.com/technareri/MARD
+  </a>
+  &nbsp;·&nbsp; QR codes generated client-side via
+  <a href="https://github.com/davidshimjs/qrcodejs" target="_blank" rel="noopener">qrcode.js</a>
+</footer>
+
+<!-- qrcode.js – generates QR codes entirely in the browser (no data sent externally) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  // ── Figure catalogue ─────────────────────────────────────────────────────
+  // Add an entry here for every figure placed in the /figures directory.
+  // Fields:
+  //   file    – filename inside /figures (required)
+  //   label   – short category tag shown in blue
+  //   title   – card heading
+  //   caption – one-sentence description
+  const FIGURES = [
+    {
+      file:    "figure1_model_comparison.png",
+      label:   "Model Comparison",
+      title:   "Figure 1 – ML Model Performance Comparison",
+      caption: "Overall prediction performance (Pearson r, RMSE) of all evaluated machine learning models on the held-out test set."
+    },
+    {
+      file:    "figure2_roc_curves.png",
+      label:   "Classification",
+      title:   "Figure 2 – ROC Curves",
+      caption: "Receiver operating characteristic curves for binary thermostability classifiers, including AUC for each model."
+    },
+    {
+      file:    "figure3_feature_importance.png",
+      label:   "Feature Analysis",
+      title:   "Figure 3 – Feature Importance",
+      caption: "Top amino-acid sequence features ranked by contribution to the best-performing gradient-boosting model."
+    },
+    {
+      file:    "figure4_residue_heatmap.png",
+      label:   "Sequence Analysis",
+      title:   "Figure 4 – Residue-Level Heatmap",
+      caption: "Position-specific scoring matrix heat-map showing residue contributions to predicted thermostability."
+    },
+    {
+      file:    "figure5_scatter_pred_vs_obs.png",
+      label:   "Regression",
+      title:   "Figure 5 – Predicted vs Observed Tm",
+      caption: "Scatter plot of predicted melting temperature (Tm) against experimentally observed Tm across all test samples."
+    },
+    {
+      file:    "figure6_ranking_summary.png",
+      label:   "Ranking",
+      title:   "Figure 6 – Model Ranking Summary",
+      caption: "Comprehensive ranking table summarizing all evaluated models across multiple performance metrics."
+    }
+  ];
+
+  // ── URL helpers ──────────────────────────────────────────────────────────
+  const RAW_BASE    = "https://raw.githubusercontent.com/technareri/MARD/main/figures/";
+  const GITHUB_BASE = "https://github.com/technareri/MARD/blob/main/figures/";
+
+  // ── Build placeholder DOM (no innerHTML) ─────────────────────────────────
+  function makePlaceholder() {
+    const wrap = document.createElement("div");
+    wrap.className = "placeholder";
+
+    const NS  = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("width",  "48");
+    svg.setAttribute("height", "48");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill",   "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width",   "1.5");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin","round");
+
+    const rect = document.createElementNS(NS, "rect");
+    rect.setAttribute("x", "3"); rect.setAttribute("y", "3");
+    rect.setAttribute("width", "18"); rect.setAttribute("height", "18");
+    rect.setAttribute("rx", "2");
+
+    const circle = document.createElementNS(NS, "circle");
+    circle.setAttribute("cx", "8.5"); circle.setAttribute("cy", "8.5");
+    circle.setAttribute("r", "1.5");
+
+    const poly = document.createElementNS(NS, "polyline");
+    poly.setAttribute("points", "21 15 16 10 5 21");
+
+    svg.appendChild(rect);
+    svg.appendChild(circle);
+    svg.appendChild(poly);
+
+    const span = document.createElement("span");
+    span.textContent = "Figure not yet uploaded";
+
+    wrap.appendChild(svg);
+    wrap.appendChild(span);
+    return wrap;
+  }
+
+  // ── Build gallery ────────────────────────────────────────────────────────
+  const gallery = document.getElementById("gallery");
+
+  FIGURES.forEach(fig => {
+    const rawUrl    = RAW_BASE    + fig.file;
+    const githubUrl = GITHUB_BASE + fig.file;
+
+    // ── Preview ──────────────────────────────────────────────────────────
+    const preview = document.createElement("div");
+    preview.className = "preview";
+
+    const figImg = document.createElement("img");
+    figImg.className = "figure-img";
+    figImg.src   = rawUrl;
+    figImg.alt   = fig.title;
+    figImg.addEventListener("error", () => {
+      preview.replaceChildren(makePlaceholder());
+    });
+    preview.appendChild(figImg);
+
+    // ── QR code container (rendered by qrcode.js) ─────────────────────
+    const qrWrap = document.createElement("div");
+    qrWrap.className = "qr";
+    // QRCode constructor renders a <canvas> (or <img>) inside qrWrap
+    new QRCode(qrWrap, {
+      text:          rawUrl,
+      width:         80,
+      height:        80,
+      colorDark:     "#24292f",
+      colorLight:    "#ffffff",
+      correctLevel:  QRCode.CorrectLevel.M
+    });
+
+    // ── Links ─────────────────────────────────────────────────────────
+    const links = document.createElement("div");
+    links.className = "links";
+
+    const dlLink = document.createElement("a");
+    dlLink.href        = rawUrl;
+    dlLink.target      = "_blank";
+    dlLink.rel         = "noopener";
+    dlLink.textContent = "⬇ Download full resolution";
+
+    const ghLink = document.createElement("a");
+    ghLink.href        = githubUrl;
+    ghLink.target      = "_blank";
+    ghLink.rel         = "noopener";
+    ghLink.textContent = "🔗 View on GitHub";
+
+    links.appendChild(dlLink);
+    links.appendChild(ghLink);
+
+    // ── Foot row ──────────────────────────────────────────────────────
+    const foot = document.createElement("div");
+    foot.className = "foot";
+    foot.appendChild(qrWrap);
+    foot.appendChild(links);
+
+    // ── Card body ─────────────────────────────────────────────────────
+    const labelEl = document.createElement("span");
+    labelEl.className   = "label";
+    labelEl.textContent = fig.label;
+
+    const titleEl = document.createElement("h2");
+    titleEl.textContent = fig.title;
+
+    const captionEl = document.createElement("p");
+    captionEl.textContent = fig.caption;
+
+    const body = document.createElement("div");
+    body.className = "body";
+    body.appendChild(labelEl);
+    body.appendChild(titleEl);
+    body.appendChild(captionEl);
+    body.appendChild(foot);
+
+    // ── Assemble card ─────────────────────────────────────────────────
+    const card = document.createElement("div");
+    card.className = "card";
+    card.appendChild(preview);
+    card.appendChild(body);
+
+    gallery.appendChild(card);
+  });
+</script>
+
+</body>
+</html>
