@@ -1,5 +1,3 @@
-# MARD
-
 # Predictive Modeling of Antibody Thermostability
 
 ## Overview
