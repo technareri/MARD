@@ -4,6 +4,8 @@
 
 This project explores the prediction of monoclonal antibody (mAb) thermostability using machine learning models trained on amino acid sequences. Specifically, it investigates how well different feature representations and model architectures can predict melting temperature (**Tm**), a critical metric for antibody developability.
 
+![General Structure](./Y-shaped.png)
+
 Thermal stability is a major factor in antibody manufacturing and storage. Poor stability can lead to aggregation and failure in later development stages. This project aims to identify computational approaches that enable accurate early-stage screening of antibody candidates.
 
 ---
